@@ -31,36 +31,32 @@ local function try_loadstring(s, component, name)
 end
 
 _G.packer_plugins = {
-  ["auto-pairs"] = {
+  ["canus.nvim"] = {
+    config = { 'try_loadstring("\\27LJ\\1\\0025\\0\\0\\2\\0\\3\\0\\0054\\0\\0\\0007\\0\\1\\0%\\1\\2\\0>\\0\\2\\1G\\0\\1\\0\\22colorscheme canus\\bcmd\\bvim\\0", "config", "canus.nvim")' },
     loaded = true,
-    path = "/home/cassio/.local/share/nvim/site/pack/packer/start/auto-pairs"
-  },
-  ["completion-nvim"] = {
-    loaded = true,
-    path = "/home/cassio/.local/share/nvim/site/pack/packer/start/completion-nvim"
+    path = "/home/cassio/.local/share/nvim/site/pack/packer/start/canus.nvim"
   },
   ["gentoo-syntax"] = {
     loaded = true,
     path = "/home/cassio/.local/share/nvim/site/pack/packer/start/gentoo-syntax"
   },
   ["haskell-vim"] = {
-    config = { "\27LJ\1\2—\2\0\0\a\0\4\0\v3\0\0\0004\1\1\0\16\2\0\0>\1\2\4D\4\3€4\6\2\0007\6\3\0069\5\4\6B\4\3\3N\4ûG\0\1\0\6g\bvim\npairs\1\0\t\22haskell_indent_if\3\3 haskell_indent_before_where\3\2\23haskell_indent_let\3\4$haskell_indent_after_bare_where\3\2\24haskell_indent_case\3\2\25haskell_indent_guard\3\2\25haskell_indent_where\3\6\22haskell_indent_in\3\1\22haskell_indent_do\3\3\0" },
+    config = { 'try_loadstring("\\27LJ\\1\\2—\\2\\0\\0\\a\\0\\4\\0\\v3\\0\\0\\0004\\1\\1\\0\\16\\2\\0\\0>\\1\\2\\4D\\4\\3€4\\6\\2\\0007\\6\\3\\0069\\5\\4\\6B\\4\\3\\3N\\4ûG\\0\\1\\0\\6g\\bvim\\npairs\\1\\0\\t\\22haskell_indent_if\\3\\3 haskell_indent_before_where\\3\\2\\23haskell_indent_let\\3\\4$haskell_indent_after_bare_where\\3\\2\\24haskell_indent_case\\3\\2\\25haskell_indent_guard\\3\\2\\25haskell_indent_where\\3\\6\\22haskell_indent_in\\3\\1\\22haskell_indent_do\\3\\3\\0", "config", "haskell-vim")' },
     loaded = true,
     path = "/home/cassio/.local/share/nvim/site/pack/packer/start/haskell-vim"
   },
+  ["nvim-compe"] = {
+    loaded = true,
+    path = "/home/cassio/.local/share/nvim/site/pack/packer/start/nvim-compe"
+  },
   ["nvim-lspconfig"] = {
-    config = { "\27LJ\1\2+\0\0\2\0\2\0\0044\0\0\0%\1\1\0>\0\2\1G\0\1\0\16modules.lsp\frequire\0" },
+    config = { 'try_loadstring("\\27LJ\\1\\2+\\0\\0\\2\\0\\2\\0\\0044\\0\\0\\0%\\1\\1\\0>\\0\\2\\1G\\0\\1\\0\\16modules.lsp\\frequire\\0", "config", "nvim-lspconfig")' },
     loaded = true,
     path = "/home/cassio/.local/share/nvim/site/pack/packer/start/nvim-lspconfig"
   },
   ["packer.nvim"] = {
     loaded = false,
     path = "/home/cassio/.local/share/nvim/site/pack/packer/opt/packer.nvim"
-  },
-  parchment = {
-    config = { "\27LJ\1\0029\0\0\2\0\3\0\0054\0\0\0007\0\1\0%\1\2\0>\0\2\1G\0\1\0\26colorscheme parchment\bcmd\bvim\0" },
-    loaded = true,
-    path = "/home/cassio/.local/share/nvim/site/pack/packer/start/parchment"
   },
   ["snippets.nvim"] = {
     loaded = true,
@@ -74,9 +70,17 @@ _G.packer_plugins = {
     loaded = true,
     path = "/home/cassio/.local/share/nvim/site/pack/packer/start/vim-css-color"
   },
+  ["vim-startuptime"] = {
+    loaded = true,
+    path = "/home/cassio/.local/share/nvim/site/pack/packer/start/vim-startuptime"
+  },
   ["vim-vinegar"] = {
     loaded = true,
     path = "/home/cassio/.local/share/nvim/site/pack/packer/start/vim-vinegar"
+  },
+  ["vim-vsnip"] = {
+    loaded = true,
+    path = "/home/cassio/.local/share/nvim/site/pack/packer/start/vim-vsnip"
   }
 }
 
@@ -84,8 +88,8 @@ _G.packer_plugins = {
 try_loadstring("\27LJ\1\2+\0\0\2\0\2\0\0044\0\0\0%\1\1\0>\0\2\1G\0\1\0\16modules.lsp\frequire\0", "config", "nvim-lspconfig")
 -- Config for: haskell-vim
 try_loadstring("\27LJ\1\2—\2\0\0\a\0\4\0\v3\0\0\0004\1\1\0\16\2\0\0>\1\2\4D\4\3€4\6\2\0007\6\3\0069\5\4\6B\4\3\3N\4ûG\0\1\0\6g\bvim\npairs\1\0\t\22haskell_indent_if\3\3 haskell_indent_before_where\3\2\23haskell_indent_let\3\4$haskell_indent_after_bare_where\3\2\24haskell_indent_case\3\2\25haskell_indent_guard\3\2\25haskell_indent_where\3\6\22haskell_indent_in\3\1\22haskell_indent_do\3\3\0", "config", "haskell-vim")
--- Config for: parchment
-try_loadstring("\27LJ\1\0029\0\0\2\0\3\0\0054\0\0\0007\0\1\0%\1\2\0>\0\2\1G\0\1\0\26colorscheme parchment\bcmd\bvim\0", "config", "parchment")
+-- Config for: canus.nvim
+try_loadstring("\27LJ\1\0025\0\0\2\0\3\0\0054\0\0\0007\0\1\0%\1\2\0>\0\2\1G\0\1\0\22colorscheme canus\bcmd\bvim\0", "config", "canus.nvim")
 END
 
 catch
