@@ -1,62 +1,27 @@
-
-require("modules.snippets")
-
--- require'lspconfig'.clangd.setup{on_attach=require'completion'.on_attach}
-
-require'snippets'.use_suggested_mappings()
-
-vim.g.completion_enable_snippet = 'snippets.nvim'
-vim.g.completion_auto_change_source = 1
-
-local opts = {noremap = true, expr = true}
+-- Keybinds: {{{
+local opts = {expr = true, silent = true}
 local mappings = {
-	{"i", "<Tab>", [[pumvisible() ? "<C-p>" : "<Tab>"]], opts},
-	{"i", "<Tab>", [[pumvisible() ? "<C-n>" : "<S-Tab>"]], opts},
-	{"i", "<CR>", [[compe#confirm('<CR>')]], opts}
+	{"i", "<CR>", "v:lua.compeCR()", opts},
+	{"i", "<Tab>", "v:lua.tab_complete()", opts},
+	{"s", "<Tab>", "v:lua.tab_complete()", opts},
+	{"i", "<S-Tab>", "v:lua.s_tab_complete()", opts},
+	{"s", "<S-Tab>", "v:lua.s_tab_complete()", opts}
 }
 
 for _, map in pairs(mappings) do
 	vim.api.nvim_set_keymap(unpack(map))
 end
 
-require'compe'.setup {
-	enabled = true;
-	autocomplete = true;
-	debug = false;
-	min_length = 1;
-	preselect = 'enable';
-	throttle_time = 80;
-	source_timeout = 200;
-	incomplete_delay = 400;
-	max_abbr_width = 100;
-	max_kind_width = 100;
-	max_menu_width = 100;
-	documentation = true;
-
-	source = {
-		path = true;
-		buffer = true;
-		calc = true;
-		vsnip = true;
-		nvim_lsp = true;
-		nvim_lua = true;
-		spell = true;
-		tags = true;
-		snippets_nvim = true;
-		treesitter = true;
-	};
-}
-
-local capabilities = vim.lsp.protocol.make_client_capabilities()
-capabilities.textDocument.completion.completionItem.snippetSupport = true
-
-require'lspconfig'.clangd.setup {
-	capabilities = capabilities,
-}
-
-
 local t = function(str)
 	return vim.api.nvim_replace_termcodes(str, true, true, true)
+end
+
+_G.compeCR = function()
+	if vim.fn.pumvisible() == 1 and vim.fn.complete_info()['selected'] ~= -1 then
+		return t("<Plug>(compe-confirm)")
+	else
+		return require("consclose").consCR()
+	end
 end
 
 -- Use (s-)tab to:
@@ -71,6 +36,7 @@ _G.tab_complete = function()
 		return t "<Tab>"
 	end
 end
+
 _G.s_tab_complete = function()
 	if vim.fn.pumvisible() == 1 then
 		return t "<C-p>"
@@ -80,8 +46,64 @@ _G.s_tab_complete = function()
 		return t "<S-Tab>"
 	end
 end
+--}}}
+-- Compe: {{{
+require'compe'.setup {
+  enabled = true;
+  autocomplete = true;
+  debug = false;
+  min_length = 1;
+  preselect = 'enable';
+  throttle_time = 80;
+  source_timeout = 200;
+  incomplete_delay = 400;
+  max_abbr_width = 100;
+  max_kind_width = 100;
+  max_menu_width = 100;
+  documentation = true;
 
-vim.api.nvim_set_keymap("i", "<Tab>", "v:lua.tab_complete()", {expr = true})
-vim.api.nvim_set_keymap("s", "<Tab>", "v:lua.tab_complete()", {expr = true})
-vim.api.nvim_set_keymap("i", "<S-Tab>", "v:lua.s_tab_complete()", {expr = true})
-vim.api.nvim_set_keymap("s", "<S-Tab>", "v:lua.s_tab_complete()", {expr = true})
+  source = {
+    spell = true;
+    path = true;
+    buffer = true;
+    calc = true;
+    nvim_lsp = true;
+    nvim_lua = true;
+    vsnip = true;
+  };
+}
+--- }}}
+-- Lsp config {{{
+
+local lspconfig = require('lspconfig')
+
+local capabilities = vim.lsp.protocol.make_client_capabilities()
+capabilities.textDocument.completion.completionItem.snippetSupport = true
+
+lspconfig.ccls.setup {
+	capabilities = capabilities,
+  -- init_options = {
+	  -- compilationDatabaseDirectory = "build";
+  --   index = {
+  --     threads = 0;
+  --   };
+  --   clang = {
+  --     excludeArgs = { "-frounding-math"} ;
+  --   };
+  -- }
+}
+
+local util = require('lspconfig/util')
+
+lspconfig.gopls.setup{
+    root_dir = function(fname)
+    	return util.root_pattern("go.mod", ".git")(fname) or
+    	util.path.dirname(fname)
+	end,
+	init_options = {
+    	usePlaceholders = true,
+	},
+	capabilities = capabilities
+}
+-- vim:fdm=marker
+--}}}

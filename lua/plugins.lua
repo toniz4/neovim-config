@@ -15,11 +15,17 @@ return require('packer').startup(function()
 	-- Packer can manage itself as an optional plugin
 	use {'wbthomason/packer.nvim', opt = true}
 
-	-- Simple plugins can be specified as strings
-	-- use {'jiangmiao/auto-pairs'}
-
-	use {'tpope/vim-vinegar'}
 	use {'tpope/vim-commentary'}
+	use {
+		'toniz4/consclose.nvim',
+		requires = {
+			'tpope/vim-endwise'
+		},
+		config = function()
+			vim.g.consclose_no_mappings = 0
+			vim.g.endwise_no_mappings = 0
+		end
+	}
 
 	use {'ap/vim-css-color'}
 
@@ -27,47 +33,46 @@ return require('packer').startup(function()
 	-- 	'ajgrf/parchment',
 	-- 	config = function() vim.cmd("colorscheme parchment") end
 	-- }
-	use {
-		'toniz4/canus.nvim',
-		config = function() vim.cmd("colorscheme canus") end
-	}
+
 	-- use {
 	-- 	'igungor/schellar',
 	-- 	config = function() vim.cmd("colorscheme schellar") end
 	-- }
+	
+	-- use {
+	-- 	'toniz4/canus.nvim',
+	-- 	config = function() vim.cmd("colorscheme canus") end
+	-- }
+
+	use {
+		'YorickPeterse/vim-paper',
+		config = function()
+			if os.getenv("TERM") == "linux" then
+				vim.cmd("colorscheme darkblue")
+			else
+				vim.cmd("colorscheme greyish")
+			end
+		end
+	}
 
 	use {'gentoo/gentoo-syntax'}
+
 
 	use{
 		'neovim/nvim-lspconfig',
 		requires = {
+			'nvim-lua/lsp-status.nvim',
 			'hrsh7th/nvim-compe',
 			'hrsh7th/vim-vsnip',
-			'norcalli/snippets.nvim'
+			'hrsh7th/vim-vsnip-integ',
 		},
 		config = function() require("modules.lsp") end
 	}
 
-	use {
-		'toniz4/vim-stt'}
+	use {'toniz4/vim-stt'}
 
-	use {
-		'neovimhaskell/haskell-vim',
-		config = function()
-			local vars =  {
-				haskell_indent_if = 3,
-				haskell_indent_case = 2,
-				haskell_indent_let = 4,
-				haskell_indent_where = 6,
-				haskell_indent_before_where = 2,
-				haskell_indent_after_bare_where = 2,
-				haskell_indent_do = 3,
-				haskell_indent_in = 1,
-				haskell_indent_guard = 2
-			}
-			for k, v in pairs(vars) do
-				vim.g[k] = v
-			end
-		end
-	}
+	use {'/justinmk/vim-dirvish'}
+
+	use {'https://github.com/dstein64/vim-startuptime'}
+
 end)

@@ -23,44 +23,41 @@ if not string.find(package.cpath, install_cpath_pattern, 1, true) then
 end
 
 local function try_loadstring(s, component, name)
-  local success, err = pcall(loadstring(s))
+  local success, result = pcall(loadstring(s))
   if not success then
     print('Error running ' .. component .. ' for ' .. name)
-    error(err)
+    error(result)
   end
+  return result
 end
 
 _G.packer_plugins = {
-  ["canus.nvim"] = {
-    config = { 'try_loadstring("\\27LJ\\1\\0025\\0\\0\\2\\0\\3\\0\\0054\\0\\0\\0007\\0\\1\\0%\\1\\2\\0>\\0\\2\\1G\\0\\1\\0\\22colorscheme canus\\bcmd\\bvim\\0", "config", "canus.nvim")' },
+  ["completion-nvim"] = {
     loaded = true,
-    path = "/home/cassio/.local/share/nvim/site/pack/packer/start/canus.nvim"
+    path = "/home/cassio/.local/share/nvim/site/pack/packer/start/completion-nvim"
+  },
+  ["consclose.nvim"] = {
+    config = { "\27LJ\1\2[\0\0\2\0\4\0\t4\0\0\0007\0\1\0'\1\0\0:\1\2\0004\0\0\0007\0\1\0'\1\0\0:\1\3\0G\0\1\0\24endwise_no_mappings\26consclose_no_mappings\6g\bvim\0" },
+    loaded = true,
+    path = "/home/cassio/.local/share/nvim/site/pack/packer/start/consclose.nvim"
   },
   ["gentoo-syntax"] = {
     loaded = true,
     path = "/home/cassio/.local/share/nvim/site/pack/packer/start/gentoo-syntax"
   },
-  ["haskell-vim"] = {
-    config = { 'try_loadstring("\\27LJ\\1\\2—\\2\\0\\0\\a\\0\\4\\0\\v3\\0\\0\\0004\\1\\1\\0\\16\\2\\0\\0>\\1\\2\\4D\\4\\3€4\\6\\2\\0007\\6\\3\\0069\\5\\4\\6B\\4\\3\\3N\\4ûG\\0\\1\\0\\6g\\bvim\\npairs\\1\\0\\t\\22haskell_indent_if\\3\\3 haskell_indent_before_where\\3\\2\\23haskell_indent_let\\3\\4$haskell_indent_after_bare_where\\3\\2\\24haskell_indent_case\\3\\2\\25haskell_indent_guard\\3\\2\\25haskell_indent_where\\3\\6\\22haskell_indent_in\\3\\1\\22haskell_indent_do\\3\\3\\0", "config", "haskell-vim")' },
+  ["lsp-status.nvim"] = {
     loaded = true,
-    path = "/home/cassio/.local/share/nvim/site/pack/packer/start/haskell-vim"
-  },
-  ["nvim-compe"] = {
-    loaded = true,
-    path = "/home/cassio/.local/share/nvim/site/pack/packer/start/nvim-compe"
+    path = "/home/cassio/.local/share/nvim/site/pack/packer/start/lsp-status.nvim"
   },
   ["nvim-lspconfig"] = {
-    config = { 'try_loadstring("\\27LJ\\1\\2+\\0\\0\\2\\0\\2\\0\\0044\\0\\0\\0%\\1\\1\\0>\\0\\2\\1G\\0\\1\\0\\16modules.lsp\\frequire\\0", "config", "nvim-lspconfig")' },
+    config = { "\27LJ\1\2+\0\0\2\0\2\0\0044\0\0\0%\1\1\0>\0\2\1G\0\1\0\16modules.lsp\frequire\0" },
     loaded = true,
     path = "/home/cassio/.local/share/nvim/site/pack/packer/start/nvim-lspconfig"
   },
   ["packer.nvim"] = {
     loaded = false,
+    needs_bufread = false,
     path = "/home/cassio/.local/share/nvim/site/pack/packer/opt/packer.nvim"
-  },
-  ["snippets.nvim"] = {
-    loaded = true,
-    path = "/home/cassio/.local/share/nvim/site/pack/packer/start/snippets.nvim"
   },
   ["vim-commentary"] = {
     loaded = true,
@@ -70,26 +67,43 @@ _G.packer_plugins = {
     loaded = true,
     path = "/home/cassio/.local/share/nvim/site/pack/packer/start/vim-css-color"
   },
+  ["vim-dirvish"] = {
+    loaded = true,
+    path = "/home/cassio/.local/share/nvim/site/pack/packer/start/vim-dirvish"
+  },
+  ["vim-endwise"] = {
+    loaded = true,
+    path = "/home/cassio/.local/share/nvim/site/pack/packer/start/vim-endwise"
+  },
+  ["vim-paper"] = {
+    config = { "\27LJ\1\2\1\0\0\2\0\b\0\0164\0\0\0007\0\1\0%\1\2\0>\0\2\2\a\0\3\0T\0\5€4\0\4\0007\0\5\0%\1\6\0>\0\2\1T\0\4€4\0\4\0007\0\5\0%\1\a\0>\0\2\1G\0\1\0\24colorscheme greyish\25colorscheme darkblue\bcmd\bvim\nlinux\tTERM\vgetenv\aos\0" },
+    loaded = true,
+    path = "/home/cassio/.local/share/nvim/site/pack/packer/start/vim-paper"
+  },
   ["vim-startuptime"] = {
     loaded = true,
     path = "/home/cassio/.local/share/nvim/site/pack/packer/start/vim-startuptime"
   },
-  ["vim-vinegar"] = {
+  ["vim-stt"] = {
     loaded = true,
-    path = "/home/cassio/.local/share/nvim/site/pack/packer/start/vim-vinegar"
+    path = "/home/cassio/.local/share/nvim/site/pack/packer/start/vim-stt"
   },
   ["vim-vsnip"] = {
     loaded = true,
     path = "/home/cassio/.local/share/nvim/site/pack/packer/start/vim-vsnip"
+  },
+  ["vim-vsnip-integ"] = {
+    loaded = true,
+    path = "/home/cassio/.local/share/nvim/site/pack/packer/start/vim-vsnip-integ"
   }
 }
 
 -- Config for: nvim-lspconfig
 try_loadstring("\27LJ\1\2+\0\0\2\0\2\0\0044\0\0\0%\1\1\0>\0\2\1G\0\1\0\16modules.lsp\frequire\0", "config", "nvim-lspconfig")
--- Config for: haskell-vim
-try_loadstring("\27LJ\1\2—\2\0\0\a\0\4\0\v3\0\0\0004\1\1\0\16\2\0\0>\1\2\4D\4\3€4\6\2\0007\6\3\0069\5\4\6B\4\3\3N\4ûG\0\1\0\6g\bvim\npairs\1\0\t\22haskell_indent_if\3\3 haskell_indent_before_where\3\2\23haskell_indent_let\3\4$haskell_indent_after_bare_where\3\2\24haskell_indent_case\3\2\25haskell_indent_guard\3\2\25haskell_indent_where\3\6\22haskell_indent_in\3\1\22haskell_indent_do\3\3\0", "config", "haskell-vim")
--- Config for: canus.nvim
-try_loadstring("\27LJ\1\0025\0\0\2\0\3\0\0054\0\0\0007\0\1\0%\1\2\0>\0\2\1G\0\1\0\22colorscheme canus\bcmd\bvim\0", "config", "canus.nvim")
+-- Config for: vim-paper
+try_loadstring("\27LJ\1\2\1\0\0\2\0\b\0\0164\0\0\0007\0\1\0%\1\2\0>\0\2\2\a\0\3\0T\0\5€4\0\4\0007\0\5\0%\1\6\0>\0\2\1T\0\4€4\0\4\0007\0\5\0%\1\a\0>\0\2\1G\0\1\0\24colorscheme greyish\25colorscheme darkblue\bcmd\bvim\nlinux\tTERM\vgetenv\aos\0", "config", "vim-paper")
+-- Config for: consclose.nvim
+try_loadstring("\27LJ\1\2[\0\0\2\0\4\0\t4\0\0\0007\0\1\0'\1\0\0:\1\2\0004\0\0\0007\0\1\0'\1\0\0:\1\3\0G\0\1\0\24endwise_no_mappings\26consclose_no_mappings\6g\bvim\0", "config", "consclose.nvim")
 END
 
 catch

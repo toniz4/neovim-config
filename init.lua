@@ -27,13 +27,11 @@ local function setopts()
 
 		tabstop = 4,
 		shiftwidth = 4,
-		softtabstop = 4,
 	}
 
 	local bufferOpts = {
 		tabstop = 4,
 		shiftwidth = 4,
-		softtabstop = 4,
 	}
 
 	local windowOpts = {
@@ -59,6 +57,8 @@ vim.o.clipboard = vim.o.clipboard .. "unnamedplus"
 
 local function setvars()
 	local globalVars = {
+		loaded_netrw = 1,
+		loaded_netrwPlugin = 1,
 		netrw_banner = 0,
 		netrw_liststyle = 3,
 		netrw_altv = 1,
@@ -66,7 +66,18 @@ local function setvars()
 		netrw_usetab = 0,
 		stt_auto_insert = 1,
 		stt_auto_quit = 1,
-		haskell_indent_if = 3,
+		closer_dont_map = 1,
+
+		haskell_indent_if = 4,
+		haskell_indent_case = 8,
+		haskell_indent_let = 4,
+		haskell_indent_where = 6,
+		haskell_indent_before_where = 2,
+		haskell_indent_after_bare_where = 8,
+		haskell_indent_do = 2,
+		haskell_indent_in = 1,
+		haskell_indent_guard = 2,
+		haskell_classic_highlighting = 0,
 	}
 
 	for k, v in pairs(globalVars) do
@@ -78,18 +89,10 @@ vim.g.mapleader = " "
 
 local opts = {noremap = true, silent = true}
 local mappings = {
-	-- Disable arrow keys
-	{"n", "<down>", "<nop>", opts},
-	{"n", "<left>", "<nop>", opts},
-	{"n", "<right>", "<nop>", opts},
-	{"i", "<up>", "<nop>", opts},
-	{"i", "<down>", "<nop>", opts},
-	{"i", "<left>", "<nop>", opts},
-	{"i", "<right>", "<nop>", opts},
-	{"v", "<up>", "<nop>", opts},
-	{"v", "<down>", "<nop>", opts},
-	{"v", "<left>", "<nop>", opts},
-	{"v", "<right>", "<nop>", opts},
+	-- Buffer list
+	{"n", "<leader>bo", ":buffers<CR>:buffer<space>", opts},
+	-- dirvish
+	{"n", "<leader>fm", ":Dirvish<CR>", opts},
 	-- Fix Y
 	{"n", "Y", "y$", {noremap = false}},
 	-- Move within splits with alt+{h,j,k,l}
@@ -136,7 +139,7 @@ local autocmds = {
 
 utils.nvim_create_augroups(autocmds)
 
--- require("")
-
 setvars()
 setopts()
+
+require("modules.statusbar")
