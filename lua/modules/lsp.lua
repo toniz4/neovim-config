@@ -82,26 +82,56 @@ capabilities.textDocument.completion.completionItem.snippetSupport = true
 
 lspconfig.ccls.setup {
 	capabilities = capabilities,
-  -- init_options = {
-	  -- compilationDatabaseDirectory = "build";
-  --   index = {
-  --     threads = 0;
-  --   };
-  --   clang = {
-  --     excludeArgs = { "-frounding-math"} ;
-  --   };
-  -- }
+	init_options = {
+		cache = {
+			directory = "/tmp/ccls"
+		},
+		index = {
+			threads = 4;
+		},
+	}
+}
+
+local sumneko_root_path = vim.fn.stdpath('cache')..'/lspconfig/sumneko_lua/lua-language-server'
+local sumneko_binary = sumneko_root_path.."/bin/Linux/lua-language-server"
+
+require'lspconfig'.sumneko_lua.setup {
+	cmd = {sumneko_binary, "-E", sumneko_root_path .. "/main.lua"};
+	settings = {
+		Lua = {
+			runtime = {
+				version = 'LuaJIT',
+				-- Setup your lua path
+				path = vim.split(package.path, ';'),
+			},
+			diagnostics = {
+				-- Get the language server to recognize the `vim` global
+				globals = {'vim'},
+			},
+			workspace = {
+				-- Make the server aware of Neovim runtime files
+				library = {
+					[vim.fn.expand('$VIMRUNTIME/lua')] = true,
+					[vim.fn.expand('$VIMRUNTIME/lua/vim/lsp')] = true,
+				},
+			},
+			-- Do not send telemetry data containing a randomized but unique identifier
+			telemetry = {
+				enable = false,
+			},
+		},
+	},
 }
 
 local util = require('lspconfig/util')
 
 lspconfig.gopls.setup{
-    root_dir = function(fname)
-    	return util.root_pattern("go.mod", ".git")(fname) or
-    	util.path.dirname(fname)
+	root_dir = function(fname)
+	 	return util.root_pattern("go.mod", ".git")(fname) or
+	 	util.path.dirname(fname)
 	end,
 	init_options = {
-    	usePlaceholders = true,
+	 	usePlaceholders = true,
 	},
 	capabilities = capabilities
 }
