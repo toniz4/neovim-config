@@ -19,4 +19,17 @@ function utils.nvim_create_augroups(definitions)
 	end
 end
 
+
+function utils.update()
+	for k in pairs(package.loaded) do
+		if k:match("^plugins") then
+			package.loaded[k] = nil
+		end
+	end
+
+	local packer = require("plugins")
+
+	packer.sync()
+end
+
 return utils

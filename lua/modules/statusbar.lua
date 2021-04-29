@@ -17,7 +17,7 @@ end
 local filetype = function()
 	filetype = vim.bo.filetype
 	if filetype then
-		return  filetype .. ' '
+		return filetype .. ' « '
 	else
 		return ''
 	end
@@ -67,7 +67,7 @@ local showmode = function()
 
 	for _, map in pairs(ppMode) do
 		if mode == map[1] then
-			return map[3] .. " " .. map[2] .. " " .. '%*'
+			return map[3] .. " " .. map[2] .. " »" .. '%*'
 		end
 	end
 end
@@ -78,7 +78,7 @@ function CallFuncs(funcs)
 	end
 end
 
-line = {
+local line = {
 	left = {
 		showmode,
 		function() return '%<' end,

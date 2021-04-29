@@ -18,9 +18,10 @@ end
 
 _G.compeCR = function()
 	if vim.fn.pumvisible() == 1 and vim.fn.complete_info()['selected'] ~= -1 then
-		return t("<Plug>(compe-confirm)")
+		-- return t("<Plug>(compe-confirm)")
+		vim.fn['compe#confirm']({select = true})
 	else
-		return require("consclose").consCR()
+		return require("consclose").consCR() .. t("<Plug>DiscretionaryEnd")
 	end
 end
 
@@ -53,19 +54,19 @@ require'compe'.setup {
   autocomplete = true;
   debug = false;
   min_length = 1;
-  preselect = 'enable';
+  preselect = 'disable';
   throttle_time = 80;
   source_timeout = 200;
   incomplete_delay = 400;
-  max_abbr_width = 100;
-  max_kind_width = 100;
-  max_menu_width = 100;
+  max_abbr_width = 40;
+  max_kind_width = 40;
+  max_menu_width = 40;
   documentation = true;
+  sort = false;
 
   source = {
-    spell = true;
     path = true;
-    buffer = true;
+    buffer = false;
     calc = true;
     nvim_lsp = true;
     nvim_lua = true;
@@ -79,6 +80,13 @@ local lspconfig = require('lspconfig')
 
 local capabilities = vim.lsp.protocol.make_client_capabilities()
 capabilities.textDocument.completion.completionItem.snippetSupport = true
+capabilities.textDocument.completion.completionItem.resolveSupport = {
+  properties = {
+    'documentation',
+    'detail',
+    'additionalTextEdits',
+  }
+}
 
 lspconfig.ccls.setup {
 	capabilities = capabilities,
@@ -91,6 +99,11 @@ lspconfig.ccls.setup {
 		},
 	}
 }
+
+-- lspconfig.clangd.setup {
+-- 	capabilities = capabilities
+-- }
+
 
 local sumneko_root_path = vim.fn.stdpath('cache')..'/lspconfig/sumneko_lua/lua-language-server'
 local sumneko_binary = sumneko_root_path.."/bin/Linux/lua-language-server"
@@ -123,7 +136,7 @@ require'lspconfig'.sumneko_lua.setup {
 	},
 }
 
-local util = require('lspconfig/util')
+local util = require('lspconfig.util')
 
 lspconfig.gopls.setup{
 	root_dir = function(fname)

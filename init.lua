@@ -1,17 +1,17 @@
-require("plugins")
+local packer = require("plugins")
+
 
 local function setopts()
 	local globalOpts = {
 		backup = false,
 		cindent = true,
-		completeopt = "menuone,noinsert,noselect",
-		-- enc = "utf-8",	
 		errorbells = false,
 		hidden = true,
 		ignorecase = true,
 		inccommand = "split",
 		incsearch = true,
 		laststatus = 2,
+		cmdheight = 1,
 		mouse = vim.o.mouse .. "a",
 		scrolloff = 2,
 		shortmess = vim.o.shortmess .. "c",
@@ -21,7 +21,6 @@ local function setopts()
 		termguicolors = true,
 		timeoutlen = 500,
 		writebackup = false,
-		background = "light",
 		completeopt = "menu,menuone,noselect",
 		title = true,
 
@@ -39,7 +38,6 @@ local function setopts()
 		number = true,
 		relativenumber = true,
 	}
-	
 	for k, v in pairs(globalOpts) do
 	    vim.o[k] = v
 	end
@@ -110,6 +108,9 @@ local mappings = {
 	{"t", "<C-j>", "<C-\\><C-n><C-w>j", opts},
 	-- Last tab
 	{"n", "<A-9>", ":$tabnext<CR>", opts},
+
+	{"n", "<leader>up", [[:lua require("modules.utils").update()<CR>]], opts},
+
 }
 
 -- Make Alt + 1-8 select tabs
@@ -121,6 +122,7 @@ end
 for _, map in pairs(mappings) do
 	vim.api.nvim_set_keymap(unpack(map))
 end
+
 
 local utils = require("modules.utils")
 
@@ -141,5 +143,11 @@ utils.nvim_create_augroups(autocmds)
 
 setvars()
 setopts()
+
+if os.getenv("TERM") == 'linux' then
+	vim.cmd("colorscheme solitary")
+else
+	vim.cmd("colorscheme solitary")
+end
 
 require("modules.statusbar")

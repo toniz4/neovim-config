@@ -29,34 +29,12 @@ return require('packer').startup(function()
 
 	use {'ap/vim-css-color'}
 
-	-- use {
-	-- 	'ajgrf/parchment',
-	-- 	config = function() vim.cmd("colorscheme parchment") end
-	-- }
+	use {'tpope/vim-fugitive'}
 
-	-- use {
-	-- 	'igungor/schellar',
-	-- 	config = function() vim.cmd("colorscheme schellar") end
-	-- }
-	
-	-- use {
-	-- 	'toniz4/canus.nvim',
-	-- 	config = function() vim.cmd("colorscheme canus") end
-	-- }
-
-	use {
-		'YorickPeterse/vim-paper',
-		config = function()
-			if os.getenv("TERM") == "linux" then
-				vim.cmd("colorscheme darkblue")
-			else
-				vim.cmd("colorscheme greyish")
-			end
-		end
-	}
+	use 'https://github.com/aditya-azad/candle-grey'
+	use 'https://github.com/swalladge/antarctic-vim'
 
 	use {'gentoo/gentoo-syntax'}
-
 
 	use{
 		'neovim/nvim-lspconfig',
