@@ -1,86 +1,82 @@
-local packer = require("plugins")
+-- local packer = require("plugins")
 
+local globalOpts = {
+	backup = false,
+	cindent = true,
+	errorbells = false,
+	hidden = true,
+	ignorecase = true,
+	inccommand = "split",
+	incsearch = true,
+	laststatus = 2,
+	cmdheight = 1,
+	mouse = vim.o.mouse .. "a",
+	scrolloff = 2,
+	shortmess = vim.o.shortmess .. "c",
+	showmode = false,
+	smartcase = true,
+	synmaxcol = 200,
+	termguicolors = true,
+	timeoutlen = 500,
+	writebackup = false,
+	completeopt = "menu,menuone,noselect",
+	title = true,
 
-local function setopts()
-	local globalOpts = {
-		backup = false,
-		cindent = true,
-		errorbells = false,
-		hidden = true,
-		ignorecase = true,
-		inccommand = "split",
-		incsearch = true,
-		laststatus = 2,
-		cmdheight = 1,
-		mouse = vim.o.mouse .. "a",
-		scrolloff = 2,
-		shortmess = vim.o.shortmess .. "c",
-		showmode = false,
-		smartcase = true,
-		synmaxcol = 200,
-		termguicolors = true,
-		timeoutlen = 500,
-		writebackup = false,
-		completeopt = "menu,menuone,noselect",
-		title = true,
+	tabstop = 4,
+	shiftwidth = 4,
+}
 
-		tabstop = 4,
-		shiftwidth = 4,
-	}
+local bufferOpts = {
+	tabstop = 4,
+	shiftwidth = 4,
+}
 
-	local bufferOpts = {
-		tabstop = 4,
-		shiftwidth = 4,
-	}
+local windowOpts = {
+	signcolumn = "number",
+	number = true,
+	relativenumber = true,
+}
 
-	local windowOpts = {
-		signcolumn = "number",
-		number = true,
-		relativenumber = true,
-	}
-	for k, v in pairs(globalOpts) do
-	    vim.o[k] = v
-	end
+for k, v in pairs(globalOpts) do
+	vim.o[k] = v
+end
 
-	for k, v in pairs(bufferOpts) do
-	    vim.bo[k] = v
-	end
+for k, v in pairs(bufferOpts) do
+	vim.bo[k] = v
+end
 
-	for k, v in pairs(windowOpts) do
-	    vim.wo[k] = v
-	end
+for k, v in pairs(windowOpts) do
+	vim.wo[k] = v
 end
 
 vim.o.clipboard = vim.o.clipboard .. "unnamedplus"
 
-local function setvars()
-	local globalVars = {
-		loaded_netrw = 1,
-		loaded_netrwPlugin = 1,
-		netrw_banner = 0,
-		netrw_liststyle = 3,
-		netrw_altv = 1,
-		netrw_winsize = 25,
-		netrw_usetab = 0,
-		stt_auto_insert = 1,
-		stt_auto_quit = 1,
-		closer_dont_map = 1,
+local globalVars = {
+	loaded_netrw = 1,
+	loaded_netrwPlugin = 1,
+	netrw_banner = 0,
+	netrw_liststyle = 3,
+	netrw_altv = 1,
+	netrw_winsize = 25,
+	netrw_usetab = 0,
+	stt_auto_insert = 1,
+	stt_auto_quit = 1,
+	closer_dont_map = 1,
 
-		haskell_indent_if = 4,
-		haskell_indent_case = 8,
-		haskell_indent_let = 4,
-		haskell_indent_where = 6,
-		haskell_indent_before_where = 2,
-		haskell_indent_after_bare_where = 8,
-		haskell_indent_do = 2,
-		haskell_indent_in = 1,
-		haskell_indent_guard = 2,
-		haskell_classic_highlighting = 0,
-	}
+	haskell_indent_if = 4,
+	haskell_indent_case = 8,
+	haskell_indent_let = 4,
+	haskell_indent_where = 6,
+	haskell_indent_before_where = 2,
+	haskell_indent_after_bare_where = 8,
+	haskell_indent_do = 2,
+	haskell_indent_in = 1,
+	haskell_indent_guard = 2,
+	haskell_classic_highlighting = 0,
+}
 
-	for k, v in pairs(globalVars) do
-	    vim.g[k] = v
-	end
+for k, v in pairs(globalVars) do
+	vim.g[k] = v
 end
 
 vim.g.mapleader = " "
@@ -140,9 +136,6 @@ local autocmds = {
 }
 
 utils.nvim_create_augroups(autocmds)
-
-setvars()
-setopts()
 
 if os.getenv("TERM") == 'linux' then
 	vim.cmd("colorscheme solitary")
