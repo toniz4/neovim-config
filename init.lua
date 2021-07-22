@@ -1,4 +1,4 @@
--- local packer = require("plugins")
+local packer = require("plugins")
 
 local globalOpts = {
 	backup = false,
@@ -62,17 +62,8 @@ local globalVars = {
 	stt_auto_insert = 1,
 	stt_auto_quit = 1,
 	closer_dont_map = 1,
-
-	haskell_indent_if = 4,
-	haskell_indent_case = 8,
-	haskell_indent_let = 4,
-	haskell_indent_where = 6,
-	haskell_indent_before_where = 2,
-	haskell_indent_after_bare_where = 8,
-	haskell_indent_do = 2,
-	haskell_indent_in = 1,
-	haskell_indent_guard = 2,
-	haskell_classic_highlighting = 0,
+	consclose_no_mappings = 0,
+	endwise_no_mappings = 0,
 }
 
 for k, v in pairs(globalVars) do
@@ -140,7 +131,8 @@ utils.nvim_create_augroups(autocmds)
 if os.getenv("TERM") == 'linux' then
 	vim.cmd("colorscheme solitary")
 else
-	vim.cmd("colorscheme solitary")
+	vim.cmd("colorscheme thirdplan")
 end
 
 require("modules.statusbar")
+require("modules.lsp")

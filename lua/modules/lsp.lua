@@ -18,8 +18,7 @@ end
 
 _G.compeCR = function()
 	if vim.fn.pumvisible() == 1 and vim.fn.complete_info()['selected'] ~= -1 then
-		-- return t("<Plug>(compe-confirm)")
-		vim.fn['compe#confirm']({select = true})
+		return vim.fn['compe#confirm']('<CR>')
 	else
 		return require("consclose").consCR() .. t("<Plug>DiscretionaryEnd")
 	end
@@ -49,6 +48,7 @@ _G.s_tab_complete = function()
 end
 --}}}
 -- Compe: {{{
+-- Compe setup
 require'compe'.setup {
   enabled = true;
   autocomplete = true;
@@ -56,21 +56,21 @@ require'compe'.setup {
   min_length = 1;
   preselect = 'disable';
   throttle_time = 80;
-  source_timeout = 200;
+  source_timeout = 0;
   incomplete_delay = 400;
-  max_abbr_width = 40;
-  max_kind_width = 40;
-  max_menu_width = 40;
+  max_abbr_width = 100;
+  max_kind_width = 100;
+  max_menu_width = 100;
   documentation = true;
-  sort = false;
 
   source = {
-    path = true;
-    buffer = false;
+ 	path = true;
+    -- buffer = true;
     calc = true;
     nvim_lsp = true;
     nvim_lua = true;
     vsnip = true;
+    ultisnips = true;
   };
 }
 --- }}}
@@ -78,67 +78,27 @@ require'compe'.setup {
 
 local lspconfig = require('lspconfig')
 
+-- capabilities.textDocument.completion.completionItem.snippetSupport = true;
+
 local capabilities = vim.lsp.protocol.make_client_capabilities()
-capabilities.textDocument.completion.completionItem.snippetSupport = true
-capabilities.textDocument.completion.completionItem.resolveSupport = {
-  properties = {
-    'documentation',
-    'detail',
-    'additionalTextEdits',
-  }
-}
+capabilities.textDocument.completion.completionItem.snippetSupport = true;
 
-lspconfig.ccls.setup {
-	capabilities = capabilities,
-	init_options = {
-		cache = {
-			directory = "/tmp/ccls"
-		},
-		index = {
-			threads = 4;
-		},
-	}
-}
-
--- lspconfig.clangd.setup {
--- 	capabilities = capabilities
+-- lspconfig.ccls.setup {
+-- 	capabilities = capabilities;
+-- 	init_options = {
+-- 		cache = {
+-- 			directory = "/tmp/ccls"
+-- 		},
+-- 		index = {
+-- 			threads = 4;
+-- 		},
+-- 	}
 -- }
-
-
-local sumneko_root_path = vim.fn.stdpath('cache')..'/lspconfig/sumneko_lua/lua-language-server'
-local sumneko_binary = sumneko_root_path.."/bin/Linux/lua-language-server"
-
-require'lspconfig'.sumneko_lua.setup {
-	cmd = {sumneko_binary, "-E", sumneko_root_path .. "/main.lua"};
-	settings = {
-		Lua = {
-			runtime = {
-				version = 'LuaJIT',
-				-- Setup your lua path
-				path = vim.split(package.path, ';'),
-			},
-			diagnostics = {
-				-- Get the language server to recognize the `vim` global
-				globals = {'vim'},
-			},
-			workspace = {
-				-- Make the server aware of Neovim runtime files
-				library = {
-					[vim.fn.expand('$VIMRUNTIME/lua')] = true,
-					[vim.fn.expand('$VIMRUNTIME/lua/vim/lsp')] = true,
-				},
-			},
-			-- Do not send telemetry data containing a randomized but unique identifier
-			telemetry = {
-				enable = false,
-			},
-		},
-	},
-}
 
 local util = require('lspconfig.util')
 
 lspconfig.gopls.setup{
+	capabilities = capabilities;
 	root_dir = function(fname)
 	 	return util.root_pattern("go.mod", ".git")(fname) or
 	 	util.path.dirname(fname)
@@ -146,7 +106,44 @@ lspconfig.gopls.setup{
 	init_options = {
 	 	usePlaceholders = true,
 	},
+}
+
+
+lspconfig.clangd.setup {
 	capabilities = capabilities
 }
+
+
+-- local sumneko_root_path = vim.fn.stdpath('cache')..'/lspconfig/sumneko_lua/lua-language-server'
+-- local sumneko_binary = sumneko_root_path.."/bin/Linux/lua-language-server"
+
+-- require'lspconfig'.sumneko_lua.setup {
+-- 	cmd = {sumneko_binary, "-E", sumneko_root_path .. "/main.lua"};
+-- 	settings = {
+-- 		Lua = {
+-- 			runtime = {
+-- 				version = 'LuaJIT',
+-- 				-- Setup your lua path
+-- 				path = vim.split(package.path, ';'),
+-- 			},
+-- 			diagnostics = {
+-- 				-- Get the language server to recognize the `vim` global
+-- 				globals = {'vim'},
+-- 			},
+-- 			workspace = {
+-- 				-- Make the server aware of Neovim runtime files
+-- 				library = {
+-- 					[vim.fn.expand('$VIMRUNTIME/lua')] = true,
+-- 					[vim.fn.expand('$VIMRUNTIME/lua/vim/lsp')] = true,
+-- 				},
+-- 			},
+-- 			-- Do not send telemetry data containing a randomized but unique identifier
+-- 			telemetry = {
+-- 				enable = false,
+-- 			},
+-- 		},
+-- 	},
+-- }
+
 -- vim:fdm=marker
 --}}}
