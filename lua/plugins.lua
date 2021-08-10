@@ -80,6 +80,10 @@ paq 'hrsh7th/vim-vsnip-integ'
 paq 'toniz4/vim-stt'
 paq 'justinmk/vim-dirvish'
 paq 'golang/vscode-go'
-paq 'lervag/vimtex'
+
+paq 'TheNiteCoder/mountaineer.vim'
+paq 'pradyungn/Mountain'
+
+paq 'dstein64/vim-startuptime'
 
 paq 'junegunn/goyo.vim'

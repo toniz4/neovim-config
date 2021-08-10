@@ -131,7 +131,7 @@ utils.nvim_create_augroups(autocmds)
 if os.getenv("TERM") == 'linux' then
 	vim.cmd("colorscheme solitary")
 else
-	vim.cmd("colorscheme thirdplan")
+	vim.cmd("colorscheme mountainplex")
 end
 
 require("modules.statusbar")
