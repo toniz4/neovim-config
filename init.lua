@@ -81,18 +81,18 @@ local mappings = {
 	-- Fix Y
 	{"n", "Y", "y$", {noremap = false}},
 	-- Move within splits with alt+{h,j,k,l}
-	{"n", "<C-h>", "<C-w>h", opts},
-	{"n", "<C-j>", "<C-w>j", opts},
-	{"n", "<C-k>", "<C-w>k", opts},
-	{"n", "<C-l>", "<C-w>l", opts},
+	-- {"n", "<C-h>", "<C-w>h", opts},
+	-- {"n", "<C-j>", "<C-w>j", opts},
+	-- {"n", "<C-k>", "<C-w>k", opts},
+	-- {"n", "<C-l>", "<C-w>l", opts},
 	-- Disable highlight with leader l
 	{"n", "<leader>l", ":nohlsearch<CR>", opts},
 	-- Terminal keybinds
 	{"n", "<F2>",      ":ToggleTerm<CR>", opts},
 	{"n", "<leader>t", ":ToggleTerm<CR>", opts},
 	{"t", "<F2>", "<C-\\><C-n>:ToggleTerm<CR>", opts},
-	{"t", "<C-k>", "<C-\\><C-n><C-w>k", opts},
-	{"t", "<C-j>", "<C-\\><C-n><C-w>j", opts},
+	-- {"t", "<C-k>", "<C-\\><C-n><C-w>k", opts},
+	-- {"t", "<C-j>", "<C-\\><C-n><C-w>j", opts},
 	-- Last tab
 	{"n", "<A-9>", ":$tabnext<CR>", opts},
 
