@@ -92,7 +92,7 @@ local line = {
 	}
 }
 
-_G.statusline = function()
+statusline = function()
 	local status = ''
 	for _, func in pairs(line.left) do
 		status = status .. func()
