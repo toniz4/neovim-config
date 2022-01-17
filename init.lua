@@ -10,7 +10,7 @@ local globalOpts = {
 	incsearch = true,
 	laststatus = 2,
 	cmdheight = 1,
-	mouse = vim.o.mouse .. "a",
+	mouse = "",
 	scrolloff = 2,
 	shortmess = vim.o.shortmess .. "c",
 	showmode = false,
@@ -118,7 +118,7 @@ local autocmds = {
 		-- Exit netrw with esc
 		{'Filetype netrw nnoremap <buffer> <esc> <C-^>'},
 		-- Spell check
-		{'FileType nroff,mail set spell spelllang=pt_br | set tw=80'},
+		{'FileType nroff,mail,tex set spell spelllang=pt_br | set tw=80'},
 		{'FileType markdown set spell spelllang=en | set tw=80'},
 		{'FileType haskell set expandtab'},
 		-- Make when saving .ms groff files

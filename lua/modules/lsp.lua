@@ -1,78 +1,154 @@
 -- Keybinds: {{{
 local opts = {expr = true, silent = true}
 local mappings = {
-	{"i", "<CR>", "v:lua.compeCR()", opts},
+	{"i", "<CR>", "v:lua.CR()", opts},
 	{"i", "<Tab>", "v:lua.tab_complete()", opts},
-	{"s", "<Tab>", "v:lua.tab_complete()", opts},
-	{"i", "<S-Tab>", "v:lua.s_tab_complete()", opts},
-	{"s", "<S-Tab>", "v:lua.s_tab_complete()", opts}
+	-- {"s", "<Tab>", "v:lua.tab_complete()", opts},
+	-- {"i", "<S-Tab>", "v:lua.s_tab_complete()", opts},
+	-- {"s", "<S-Tab>", "v:lua.s_tab_complete()", opts}
 }
 
 for _, map in pairs(mappings) do
 	vim.api.nvim_set_keymap(unpack(map))
 end
 
-local t = function(str)
-	return vim.api.nvim_replace_termcodes(str, true, true, true)
+_G.CR = function()
+	return require("consclose").consCR() .. "<Plug>DiscretionaryEnd"
 end
 
-_G.compeCR = function()
-	if vim.fn.pumvisible() == 1 and vim.fn.complete_info()['selected'] ~= -1 then
-		return vim.fn['compe#confirm']('<CR>')
-	else
-		return require("consclose").consCR() .. t("<Plug>DiscretionaryEnd")
-	end
-end
-
--- Use (s-)tab to:
---- move to prev/next item in completion menuone
---- jump to prev/next snippet's placeholder
 _G.tab_complete = function()
-	if vim.fn.pumvisible() == 1 then
-		return t "<C-n>"
-	elseif vim.fn.call("vsnip#available", {1}) == 1 then
-		return t "<Plug>(vsnip-expand-or-jump)"
+	if vim.fn.call("vsnip#available", {1}) == 1 then
+		return "<Plug>(vsnip-expand-or-jump)"
 	else
-		return t "<Tab>"
+		return "<Tab>"
 	end
 end
 
 _G.s_tab_complete = function()
-	if vim.fn.pumvisible() == 1 then
-		return t "<C-p>"
-	elseif vim.fn.call("vsnip#jumpable", {-1}) == 1 then
-		return t "<Plug>(vsnip-jump-prev)"
+	if vim.fn.call("vsnip#jumpable", {-1}) == 1 then
+		return "<Plug>(vsnip-jump-prev)"
 	else
-		return t "<S-Tab>"
+		return "<S-Tab>"
 	end
+end
+
+-- Use an on_attach function to only map the following keys
+-- after the language server attaches to the current buffer
+local on_attach = function(client, bufnr)
+  local function buf_set_keymap(...) vim.api.nvim_buf_set_keymap(bufnr, ...) end
+  local function buf_set_option(...) vim.api.nvim_buf_set_option(bufnr, ...) end
+
+  -- Enable completion triggered by <c-x><c-o>
+  buf_set_option('omnifunc', 'v:lua.vim.lsp.omnifunc')
+
+  -- Mappings.
+  local opts = { noremap=true, silent=true }
+
+  -- See `:help vim.lsp.*` for documentation on any of the below functions
+  buf_set_keymap('n', 'gD', '<cmd>lua vim.lsp.buf.declaration()<CR>', opts)
+  buf_set_keymap('n', 'gd', '<cmd>lua vim.lsp.buf.definition()<CR>', opts)
+  buf_set_keymap('n', 'K', '<cmd>lua vim.lsp.buf.hover()<CR>', opts)
+  buf_set_keymap('n', 'gi', '<cmd>lua vim.lsp.buf.implementation()<CR>', opts)
+  buf_set_keymap('n', '<C-k>', '<cmd>lua vim.lsp.buf.signature_help()<CR>', opts)
+  buf_set_keymap('n', '<space>wa', '<cmd>lua vim.lsp.buf.add_workspace_folder()<CR>', opts)
+  buf_set_keymap('n', '<space>wr', '<cmd>lua vim.lsp.buf.remove_workspace_folder()<CR>', opts)
+  buf_set_keymap('n', '<space>wl', '<cmd>lua print(vim.inspect(vim.lsp.buf.list_workspace_folders()))<CR>', opts)
+  buf_set_keymap('n', '<space>D', '<cmd>lua vim.lsp.buf.type_definition()<CR>', opts)
+  buf_set_keymap('n', '<space>rn', '<cmd>lua vim.lsp.buf.rename()<CR>', opts)
+  buf_set_keymap('n', '<space>ca', '<cmd>lua vim.lsp.buf.code_action()<CR>', opts)
+  buf_set_keymap('n', 'gr', '<cmd>lua vim.lsp.buf.references()<CR>', opts)
+  buf_set_keymap('n', '<space>e', '<cmd>lua vim.lsp.diagnostic.show_line_diagnostics()<CR>', opts)
+  buf_set_keymap('n', '[d', '<cmd>lua vim.lsp.diagnostic.goto_prev()<CR>', opts)
+  buf_set_keymap('n', ']d', '<cmd>lua vim.lsp.diagnostic.goto_next()<CR>', opts)
+  buf_set_keymap('n', '<space>q', '<cmd>lua vim.lsp.diagnostic.set_loclist()<CR>', opts)
+  buf_set_keymap('n', '<space>f', '<cmd>lua vim.lsp.buf.formatting()<CR>', opts)
+
 end
 --}}}
 -- Compe: {{{
 -- Compe setup
-require'compe'.setup {
-  enabled = true;
-  autocomplete = true;
-  debug = false;
-  min_length = 1;
-  preselect = 'disable';
-  throttle_time = 80;
-  source_timeout = 0;
-  incomplete_delay = 400;
-  max_abbr_width = 100;
-  max_kind_width = 100;
-  max_menu_width = 100;
-  documentation = true;
+local cmp = require'cmp'
 
-  source = {
- 	path = true;
-    -- buffer = true;
-    calc = true;
-    nvim_lsp = true;
-    nvim_lua = true;
-    vsnip = true;
-    ultisnips = true;
-  };
-}
+cmp.setup({
+	snippet = {
+		-- REQUIRED - you must specify a snippet engine
+		expand = function(args)
+			vim.fn["vsnip#anonymous"](args.body) -- For `vsnip` users.
+			-- require('luasnip').lsp_expand(args.body) -- For `luasnip` users.
+			-- require('snippy').expand_snippet(args.body) -- For `snippy` users.
+			-- vim.fn["UltiSnips#Anon"](args.body) -- For `ultisnips` users.
+		end,
+	},
+	mapping = {
+		['<C-b>'] = cmp.mapping(cmp.mapping.scroll_docs(-4), { 'i', 'c' }),
+		['<C-f>'] = cmp.mapping(cmp.mapping.scroll_docs(4), { 'i', 'c' }),
+		['<C-Space>'] = cmp.mapping(cmp.mapping.complete(), { 'i', 'c' }),
+		['<C-y>'] = cmp.config.disable, -- Specify `cmp.config.disable` if you want to remove the default `<C-y>` mapping.
+		['<C-e>'] = cmp.mapping({
+			i = cmp.mapping.abort(),
+			c = cmp.mapping.close(),
+		}),
+		['<CR>'] = cmp.mapping.confirm({ select = false }), -- Accept currently selected item. Set `select` to `false` to only confirm explicitly selected items.
+		['<Tab>'] = function(fallback)
+			if cmp.visible() then
+				cmp.select_next_item()
+			else
+				fallback()
+			end
+		end,
+		['<S-Tab>'] = function(fallback)
+			if cmp.visible() then
+				cmp.select_prev_item()
+			else
+				fallback()
+			end
+		end,
+	},
+	sources = cmp.config.sources({
+		{
+			name = 'nvim_lsp',
+			priority = 40
+		},
+		{ 
+			name = 'vsnip',
+			priority = 50
+		},
+		{ 
+			name = 'buffer',
+			priority = 30
+		},
+		{ 
+			name = 'path',
+			priority = 50
+		},
+		{ 
+			name = 'spell',
+			priority = 60
+		},
+		-- { name = 'luasnip' }, -- For luasnip users.
+		-- { name = 'ultisnips' }, -- For ultisnips users.
+		-- { name = 'snippy' }, -- For snippy users.
+	}, {
+		{ name = 'buffer' },
+	})
+})
+
+	-- Use buffer source for `/` (if you enabled `native_menu`, this won't work anymore).
+	cmp.setup.cmdline('/', {
+		sources = {
+			{ name = 'buffer' }
+		}
+	})
+
+	-- Use cmdline & path source for ':' (if you enabled `native_menu`, this won't work anymore).
+	cmp.setup.cmdline(':', {
+		sources = cmp.config.sources({
+			{ name = 'path' }
+		}, {
+			{ name = 'cmdline' }
+		})
+	})
+
 --- }}}
 -- Lsp config {{{
 
@@ -80,20 +156,27 @@ local lspconfig = require('lspconfig')
 
 -- capabilities.textDocument.completion.completionItem.snippetSupport = true;
 
-local capabilities = vim.lsp.protocol.make_client_capabilities()
-capabilities.textDocument.completion.completionItem.snippetSupport = true;
+-- local capabilities = vim.lsp.protocol.make_client_capabilities()
 
--- lspconfig.ccls.setup {
--- 	capabilities = capabilities;
--- 	init_options = {
--- 		cache = {
--- 			directory = "/tmp/ccls"
--- 		},
--- 		index = {
--- 			threads = 4;
--- 		},
--- 	}
--- }
+ local capabilities = require('cmp_nvim_lsp').update_capabilities(vim.lsp.protocol.make_client_capabilities())
+
+-- capabilities.textDocument.completion.completionItem.snippetSupport = true;
+
+lspconfig.ccls.setup {
+	capabilities = capabilities;
+    on_attach = on_attach;
+	flags = {
+      debounce_text_changes = 150,
+    };
+	init_options = {
+		cache = {
+			directory = "/tmp/ccls"
+		},
+		index = {
+			threads = 4;
+		},
+	}
+}
 
 local util = require('lspconfig.util')
 
@@ -109,9 +192,10 @@ lspconfig.gopls.setup{
 }
 
 
-lspconfig.clangd.setup {
-	capabilities = capabilities
-}
+-- lspconfig.clangd.setup {
+-- 	cmd = { "clangd90", "--background-index", "-completion-style=bundled" },
+-- 	capabilities = capabilities
+-- }
 
 
 -- local sumneko_root_path = vim.fn.stdpath('cache')..'/lspconfig/sumneko_lua/lua-language-server'
