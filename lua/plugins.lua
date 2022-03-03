@@ -35,4 +35,8 @@ require "paq" {
 	'junegunn/goyo.vim';
 
 	'salkin-mada/openscad.nvim';
+
+	'elixir-editors/vim-elixir';
+	'nvim-lua/plenary.nvim';
+	'mfussenegger/nvim-fzy'
 }

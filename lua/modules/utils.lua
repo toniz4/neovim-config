@@ -1,26 +1,29 @@
 local utils = {}
 local api = vim.api
 
-function utils.escape_keymap(key)
-	-- Prepend with a letter so it can be used as a dictionary key
+utils.feedkey = function(key, mode)
+	vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes(key, true, true, true), mode, true)
+end
+
+utils.escape_keymap = function(key)
 	return "k" .. key:gsub(".", string.byte)
 end
 
 -- grabbed from https://github.com/norcalli/nvim_utils
-function utils.nvim_create_augroups(definitions)
+utils.nvim_create_augroups = function(definitions)
 	for group_name, definition in pairs(definitions) do
 		api.nvim_command("augroup " .. group_name)
 		api.nvim_command("autocmd!")
-    for _, def in ipairs(definition) do
+	for _, def in ipairs(definition) do
 		local command = table.concat(vim.tbl_flatten {"autocmd", def}, " ")
 		api.nvim_command(command)
-    end
+	end
 		api.nvim_command("augroup END")
 	end
 end
 
 
-function utils.update()
+utils.update = function()
 	for k in pairs(package.loaded) do
 		if k:match("^plugins") then
 			package.loaded[k] = nil

@@ -1,8 +1,8 @@
 -- Keybinds: {{{
 local opts = {expr = true, silent = true}
 local mappings = {
-	{"i", "<CR>", "v:lua.CR()", opts},
-	{"i", "<Tab>", "v:lua.tab_complete()", opts},
+	-- {"i", "<CR>", "v:lua.CR()", opts},
+	-- {"i", "<Tab>", "v:lua.tab_complete()", opts},
 	-- {"s", "<Tab>", "v:lua.tab_complete()", opts},
 	-- {"i", "<S-Tab>", "v:lua.s_tab_complete()", opts},
 	-- {"s", "<S-Tab>", "v:lua.s_tab_complete()", opts}
@@ -10,10 +10,6 @@ local mappings = {
 
 for _, map in pairs(mappings) do
 	vim.api.nvim_set_keymap(unpack(map))
-end
-
-_G.CR = function()
-	return require("consclose").consCR() .. "<Plug>DiscretionaryEnd"
 end
 
 _G.tab_complete = function()
@@ -67,6 +63,14 @@ end
 --}}}
 -- Compe: {{{
 -- Compe setup
+
+local has_words_before = function()
+	local line, col = unpack(vim.api.nvim_win_get_cursor(0))
+	return col ~= 0 and vim.api.nvim_buf_get_lines(0, line - 1, line, true)[1]:sub(col, col):match("%s") == nil
+end
+
+
+local utils = require('modules.utils')
 local cmp = require'cmp'
 
 cmp.setup({
@@ -89,20 +93,24 @@ cmp.setup({
 			c = cmp.mapping.close(),
 		}),
 		['<CR>'] = cmp.mapping.confirm({ select = false }), -- Accept currently selected item. Set `select` to `false` to only confirm explicitly selected items.
-		['<Tab>'] = function(fallback)
+		["<Tab>"] = cmp.mapping(function(fallback)
 			if cmp.visible() then
 				cmp.select_next_item()
+			elseif vim.fn["vsnip#available"](1) == 1 then
+				utils.feedkey("<Plug>(vsnip-expand-or-jump)", "")
+			elseif has_words_before() then
+				cmp.complete()
 			else
 				fallback()
 			end
-		end,
-		['<S-Tab>'] = function(fallback)
+		end, { "i", "s" }),
+		["<S-Tab>"] = cmp.mapping(function()
 			if cmp.visible() then
 				cmp.select_prev_item()
-			else
-				fallback()
+			elseif vim.fn["vsnip#jumpable"](-1) == 1 then
+				feedkey("<Plug>(vsnip-jump-prev)", "")
 			end
-		end,
+		end, { "i", "s" }),
 	},
 	sources = cmp.config.sources({
 		{
@@ -134,20 +142,20 @@ cmp.setup({
 })
 
 	-- Use buffer source for `/` (if you enabled `native_menu`, this won't work anymore).
-	cmp.setup.cmdline('/', {
-		sources = {
-			{ name = 'buffer' }
-		}
-	})
+	-- cmp.setup.cmdline('/', {
+	-- 	sources = {
+	-- 		{ name = 'buffer' }
+	-- 	}
+	-- })
 
-	-- Use cmdline & path source for ':' (if you enabled `native_menu`, this won't work anymore).
-	cmp.setup.cmdline(':', {
-		sources = cmp.config.sources({
-			{ name = 'path' }
-		}, {
-			{ name = 'cmdline' }
-		})
-	})
+	-- -- Use cmdline & path source for ':' (if you enabled `native_menu`, this won't work anymore).
+	-- cmp.setup.cmdline(':', {
+	-- 	sources = cmp.config.sources({
+	-- 		{ name = 'path' }
+	-- 	}, {
+	-- 		{ name = 'cmdline' }
+	-- 	})
+	-- })
 
 --- }}}
 -- Lsp config {{{
@@ -191,11 +199,11 @@ lspconfig.gopls.setup{
 	},
 }
 
-
--- lspconfig.clangd.setup {
--- 	cmd = { "clangd90", "--background-index", "-completion-style=bundled" },
--- 	capabilities = capabilities
--- }
+require'lspconfig'.elixirls.setup{
+    -- Unix
+	capabilities = capabilities;
+    cmd = {"/home/cassio/src/elixir-ls/release/language_server.sh"};
+}
 
 
 -- local sumneko_root_path = vim.fn.stdpath('cache')..'/lspconfig/sumneko_lua/lua-language-server'

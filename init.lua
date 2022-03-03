@@ -96,8 +96,10 @@ local mappings = {
 	-- Last tab
 	{"n", "<A-9>", ":$tabnext<CR>", opts},
 
+	-- {"i", "<CR>", "v:lua.CR()", opts},
+	{"i", "<CR>", "<Cmd>call v:lua.require('modules.mappings').enter()<CR>", opts},
 	{"n", "<leader>up", [[:lua require("modules.utils").update()<CR>]], opts},
-
+	{"n", "<leader>ff", [[:lua require('fzy').actions.quickfix()<CR>]], opts},
 }
 
 -- Make Alt + 1-8 select tabs
