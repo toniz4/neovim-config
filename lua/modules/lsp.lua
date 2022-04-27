@@ -1,32 +1,4 @@
 -- Keybinds: {{{
-local opts = {expr = true, silent = true}
-local mappings = {
-	-- {"i", "<CR>", "v:lua.CR()", opts},
-	-- {"i", "<Tab>", "v:lua.tab_complete()", opts},
-	-- {"s", "<Tab>", "v:lua.tab_complete()", opts},
-	-- {"i", "<S-Tab>", "v:lua.s_tab_complete()", opts},
-	-- {"s", "<S-Tab>", "v:lua.s_tab_complete()", opts}
-}
-
-for _, map in pairs(mappings) do
-	vim.api.nvim_set_keymap(unpack(map))
-end
-
-_G.tab_complete = function()
-	if vim.fn.call("vsnip#available", {1}) == 1 then
-		return "<Plug>(vsnip-expand-or-jump)"
-	else
-		return "<Tab>"
-	end
-end
-
-_G.s_tab_complete = function()
-	if vim.fn.call("vsnip#jumpable", {-1}) == 1 then
-		return "<Plug>(vsnip-jump-prev)"
-	else
-		return "<S-Tab>"
-	end
-end
 
 -- Use an on_attach function to only map the following keys
 -- after the language server attaches to the current buffer
@@ -71,7 +43,10 @@ end
 
 
 local utils = require('modules.utils')
-local cmp = require'cmp'
+local cmp_autopairs = require('nvim-autopairs.completion.cmp')
+local cmp = require('cmp')
+
+cmp.event:on( 'confirm_done', cmp_autopairs.on_confirm_done({  map_char = { tex = '' } }))
 
 cmp.setup({
 	snippet = {

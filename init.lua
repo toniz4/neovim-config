@@ -62,8 +62,13 @@ local globalVars = {
 	stt_auto_insert = 1,
 	stt_auto_quit = 1,
 	closer_dont_map = 1,
-	consclose_no_mappings = 0,
+	-- consclose_no_mappings = 0,
 	endwise_no_mappings = 0,
+	ctrlp_user_command = 'ag %s -l -g ""' ,
+	ctrlp_use_caching = 0,
+
+	haskell_indent_before_where = 2,
+	haskell_indent_after_bare_where = 2
 }
 
 for k, v in pairs(globalVars) do
@@ -97,9 +102,10 @@ local mappings = {
 	{"n", "<A-9>", ":$tabnext<CR>", opts},
 
 	-- {"i", "<CR>", "v:lua.CR()", opts},
-	{"i", "<CR>", "<Cmd>call v:lua.require('modules.mappings').enter()<CR>", opts},
+	-- {"i", "<CR>", "<Cmd>call v:lua.require('modules.mappings').enter()<CR>", opts},
 	{"n", "<leader>up", [[:lua require("modules.utils").update()<CR>]], opts},
-	{"n", "<leader>ff", [[:lua require('fzy').actions.quickfix()<CR>]], opts},
+	{"n", "<leader>lf", [[:CtrlP <CR>]], opts},
+	{"n", "<leader>ld", [[:CtrlP <CR>]], opts},
 }
 
 -- Make Alt + 1-8 select tabs
@@ -119,6 +125,8 @@ local autocmds = {
 	general = {
 		-- Exit netrw with esc
 		{'Filetype netrw nnoremap <buffer> <esc> <C-^>'},
+		-- Edit new file in dirvish
+		{'Filetype dirvish nmap <buffer> e :e %'},
 		-- Spell check
 		{'FileType nroff,mail,tex set spell spelllang=pt_br | set tw=80'},
 		{'FileType markdown set spell spelllang=en | set tw=80'},
@@ -133,8 +141,13 @@ utils.nvim_create_augroups(autocmds)
 if os.getenv("TERM") == 'linux' then
 	vim.cmd("colorscheme solitary")
 else
+	-- vim.o.background = 'light'
+	-- vim.g.mellow_user_colors = 1
+	-- vim.cmd("colorscheme mellow")
 	vim.cmd("colorscheme mountainplex")
 end
 
 require("modules.statusbar")
 require("modules.lsp")
+
+require('nvim-autopairs').setup{}
