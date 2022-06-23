@@ -4,9 +4,7 @@ if vim.fn.empty(vim.fn.glob(install_path)) > 0 then
 	vim.cmd("!git clone https://github.com/savq/paq-nvim " .. install_path)
 end
 
-paq = require("paq")
-
-packages = {
+require("paq") {
 	'savq/paq-nvim',     -- Let Paq manage itself
 
 	'neovim/nvim-lspconfig',
@@ -48,17 +46,6 @@ packages = {
 	-- 'neovimhaskell/haskell-vim',
 	'adigitoleo/vim-mellow',
 	'boppyt/avalanche',
-	'windwp/nvim-autopairs'
+	'windwp/nvim-autopairs',
+	'Olical/conjure'
 }
-
-paq(packages)
-
-local plugin_path = vim.fn.stdpath("data") .. "/site/pack/paqs/start/"
-
-for _, p in pairs(packages) do
-    local path = plugin_path .. p:gsub('.*/', '')
-
-	if vim.fn.empty(vim.fn.glob(path)) > 0 then
-		paq.install()
-	end
-end

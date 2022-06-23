@@ -76,6 +76,7 @@ for k, v in pairs(globalVars) do
 end
 
 vim.g.mapleader = " "
+vim.g.maplocalleader = " "
 
 local opts = {noremap = true, silent = true}
 local mappings = {
@@ -123,31 +124,32 @@ local utils = require("modules.utils")
 
 local autocmds = {
 	general = {
-		-- Exit netrw with esc
-		{'Filetype netrw nnoremap <buffer> <esc> <C-^>'},
-		-- Edit new file in dirvish
-		{'Filetype dirvish nmap <buffer> e :e %'},
-		-- Spell check
-		{'FileType nroff,mail,tex set spell spelllang=pt_br | set tw=80'},
-		{'FileType markdown set spell spelllang=en | set tw=80'},
-		{'FileType haskell set expandtab'},
-		-- Make when saving .ms groff files
-		{'BufWritePost *.ms :silent exec "!make"'},
+		{
+			event = 'Filetype',
+			pattern = "netrw", 
+			command = "nnoremap <buffer> <esc> <C-^>"
+		},
+		{
+			event = 'FileType',
+			pattern = {"nroff", "mail", "tex"}, 
+			command = "set spell spelllang=pt_br | set tw=80"
+		},
+		{
+			event = 'FileType', 
+			pattern = "markdown",
+			command = "set spell spelllang=en | set tw=80"
+		},
 	}
 }
 
-utils.nvim_create_augroups(autocmds)
+utils.create_augroup_autocmd(autocmds)
 
 if os.getenv("TERM") == 'linux' then
 	vim.cmd("colorscheme solitary")
 else
-	-- vim.o.background = 'light'
-	-- vim.g.mellow_user_colors = 1
-	-- vim.cmd("colorscheme mellow")
 	vim.cmd("colorscheme mountainplex")
 end
 
 require("modules.statusbar")
 require("modules.lsp")
-
 require('nvim-autopairs').setup{}

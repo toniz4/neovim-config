@@ -4,3 +4,4 @@ function! Syn()
   endfor
 endfunction
 command! -nargs=0 Syn call Syn()
+

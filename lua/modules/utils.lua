@@ -9,16 +9,24 @@ utils.escape_keymap = function(key)
 	return "k" .. key:gsub(".", string.byte)
 end
 
--- grabbed from https://github.com/norcalli/nvim_utils
-utils.nvim_create_augroups = function(definitions)
+local removekey = function(table, key)
+   local element = table[key]
+   table[key] = nil
+   return element
+end
+
+utils.create_augroup_autocmd = function(definitions)
 	for group_name, definition in pairs(definitions) do
-		api.nvim_command("augroup " .. group_name)
-		api.nvim_command("autocmd!")
-	for _, def in ipairs(definition) do
-		local command = table.concat(vim.tbl_flatten {"autocmd", def}, " ")
-		api.nvim_command(command)
-	end
-		api.nvim_command("augroup END")
+		local id = api.nvim_create_augroup(group_name, {})
+
+		for _, def in pairs(definition) do
+			local event = def.event
+			removekey(def, "event")
+			local opts = def
+			opts.group = id
+
+			api.nvim_create_autocmd(event, opts)
+		end
 	end
 end
 

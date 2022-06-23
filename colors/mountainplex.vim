@@ -1,1 +1,1 @@
-../../../src/mountainplex.vim/colors/mountainplex.vim
+../../../../../src/mountainplex.vim/colors/mountainplex.vim

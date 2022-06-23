@@ -177,7 +177,7 @@ lspconfig.gopls.setup{
 require'lspconfig'.elixirls.setup{
     -- Unix
 	capabilities = capabilities;
-    cmd = {"/home/cassio/src/elixir-ls/release/language_server.sh"};
+    cmd = {"elixir-ls"};
 }
 
 
