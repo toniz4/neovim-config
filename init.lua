@@ -1,4 +1,7 @@
+require("modules.statusbar")
+
 local packer = require("plugins")
+local utils = require("modules.utils")
 
 local globalOpts = {
 	backup = false,
@@ -106,7 +109,7 @@ local mappings = {
 	-- {"i", "<CR>", "<Cmd>call v:lua.require('modules.mappings').enter()<CR>", opts},
 	{"n", "<leader>up", [[:lua require("modules.utils").update()<CR>]], opts},
 	{"n", "<leader>lf", [[:CtrlP <CR>]], opts},
-	{"n", "<leader>ld", [[:CtrlP <CR>]], opts},
+	{"n", "<leader>lb", [[:CtrlPBuffer <CR>]], opts},
 }
 
 -- Make Alt + 1-8 select tabs
@@ -120,7 +123,6 @@ for _, map in pairs(mappings) do
 end
 
 
-local utils = require("modules.utils")
 
 local autocmds = {
 	general = {
@@ -150,6 +152,3 @@ else
 	vim.cmd("colorscheme mountainplex")
 end
 
-require("modules.statusbar")
-require("modules.lsp")
-require('nvim-autopairs').setup{}
