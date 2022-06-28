@@ -44,7 +44,7 @@ return require("packer").startup(function()
 	use 'rafamadriz/friendly-snippets'
 
 	use {
-		"https://git.sr.ht/~whynothugo/lsp_lines.nvim",
+		'https://git.sr.ht/~whynothugo/lsp_lines.nvim',
   		config = function()
 			require("lsp_lines").register_lsp_virtual_lines()
 			vim.diagnostic.config {
@@ -53,12 +53,6 @@ return require("packer").startup(function()
   		end
 	}
 
-	-- use {
-  		-- "https://git.sr.ht/~whynothugo/lsp_lines.nvim",
-	-- 	config = function()
-	-- 		require("lsp_lines").register_lsp_virtual_lines()
-  		-- end
-	-- }
 	-- Programing languages
 	use 'sheerun/vim-polyglot'
 	-- Clojure
