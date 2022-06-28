@@ -23,26 +23,6 @@ return require("packer").startup(function()
 	use 'ctrlpvim/ctrlp.vim'
 	use 'justinmk/vim-dirvish'
 
-	-- Lsp stuff
-	-- use {
-	-- 	'neovim/nvim-lspconfig',
-	-- 	requires = {
-	-- 		'hrsh7th/nvim-cmp',
-
-	-- 		'hrsh7th/cmp-nvim-lsp',
-	-- 		'hrsh7th/vim-vsnip',
-	-- 		'hrsh7th/vim-vsnip-integ',
-	-- 		'hrsh7th/cmp-vsnip',
-	-- 		'hrsh7th/cmp-buffer',
-	-- 		'hrsh7th/cmp-path',
-	-- 		'f3fora/cmp-spell',
-	-- 		'rafamadriz/friendly-snippets'
-	-- 	},
-	-- 	config = function()
-	-- 		require("modules.lsp")
-	-- 	end,
-	-- 	event = 'InsertEnter *'
-	-- }
 	-- Lsp 
 	use 'neovim/nvim-lspconfig'
 
